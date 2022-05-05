@@ -1,3 +1,3 @@
 import './style.scss';
 
-console.log('Hello World!');
+import './assets/js/createKeyboard';
