@@ -1,3 +1,3 @@
 import './style.scss';
 
-import './assets/js/createKeyboard';
+import './assets/js/app';
