@@ -40,9 +40,9 @@ class Keyboard {
     });
 
     document.addEventListener('keydown', (event) => this.eventHandler(event));
-    // document.addEventListener('keyup', (event) => { this.eventHandler(event); });
-    // document.body.addEventListener('mousedown', (event) => { this.eventHandler(event); });
-
+    document.addEventListener('keyup', (event) => { this.eventHandler(event); });
+    // window.addEventListener('mousedown', (event) => { this.eventHandler(event); });
+    // window.addEventListener('mouseup', (event) => { this.eventHandler(event); });
     /*
     const { body } = document;
 
@@ -65,21 +65,24 @@ class Keyboard {
     this.keys.forEach((item) => {
       keyboardWrapper.append(item.createKey());
     });
-
-    body.addEventListener('keydown', (event) => { this.eventCatcher(event); });
-    body.addEventListener('mousedown', (event) => { this.eventCatcher(event); });
     */
   }
 
   eventHandler(event) {
     event.preventDefault();
     event.stopPropagation();
-    const keyCode = event.code;
+
     const key = this.keys;
-    key[keyCode].keyDown(event);
+    if (event.type === 'keydown') {
+      const keyCode = event.code;
+      key[keyCode].keyDown(event);
+    }
+    if (event.type === 'keyup') {
+      const keyCode = event.code;
+      key[keyCode].keyUp(event);
+    }
+    let language = localStorage.getItem('language');
     if (event.ctrlKey && event.altKey) {
-      let language = localStorage.getItem('language');
-      // console.log(language);
       if (language === 'ru') {
         language = 'en';
       } else {
@@ -88,6 +91,12 @@ class Keyboard {
       console.log(language);
       this.lang = language;
       this.changeLanguage();
+    }
+    console.log(event);
+    if (event.key === 'Shift') {
+      console.log('shift');
+      this.lang = language;
+      this.shiftKey();
     }
   }
 
