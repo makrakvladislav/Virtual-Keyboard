@@ -3,9 +3,94 @@
   margin: 0 auto;
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 10px;
+  padding: 3rem 40px;
+  border-radius: 20px;
+  // background-color: #ccc;
+  // background-color: #ffffff;
+  // background-image: linear-gradient(315deg, #ffffff 0%, #d7e1ec 74%);
+  background-color: #d9d9d9;
+  background-image: linear-gradient(315deg, #d9d9d9 0%, #f6f2f2 74%);
+  -webkit-box-shadow: 4px 4px 22px 0px rgb(17 68 107 / 20%);
+  -moz-box-shadow: 4px 4px 22px 0px rgba(17, 68, 107, 0.2);
+  box-shadow: 4px 4px 22px 0px rgb(17 68 107 / 20%);
 }
 
 .keyboard__row {
   display: flex;
+  gap: 10px;
+}
+
+.key-button {
+  position: relative;
+  width: 60px;
+  border: none;
+  height: 60px;
+  border-radius: 10px;
+  color: #fff;
+  background: linear-gradient(180deg, #282828, #292929);
+  box-shadow: inset -8px 0 8px rgb(0 0 0 / 15%), inset 0px -8px 8px rgb(0 0 0 / 25%), 0 0 0 2px rgb(0 0 0 / 75%), 10px 20px 25px rgb(0 0 0 / 40%);
+  /* border: 2px solid #5a5a5a; */
+  overflow: hidden;
+  &:active {
+    transform: scale(0.9);
+  }
+}
+
+.key-button:before {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 4px;
+  bottom: 14px;
+  right: 12px;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #282828, #202020);
+  box-shadow: -10px -10px 10px rgb(255 255 255 / 25%), 10px 5px 10px rgb(0 0 0 / 15%);
+  border-left: 1px solid #0004;
+  border-bottom: 1px solid #0004;
+  border-top: 1px solid #0004;
+}
+
+.key-button {
+  .key-value {
+    position: relative;
+    z-index: 100;
+  }
+  .key-shift {
+    position: relative;
+    z-index: 100;
+  }
+}
+
+.key-button.active {
+  transform: scale(0.9);
+}
+
+button[value="Tab"] {
+  width: 105px;
+}
+
+button[value=CapsLock] {
+  width: 145px;
+}
+
+button[value="ShiftRight"] {
+  width: 135px;
+}
+
+button[value=ShiftLeft] {
+  width: 170px;
+}
+
+button[value="Space"] {
+  width: 450px;
+}
+
+button[value="Backspace"] {
+  width: 175px;
+}
+
+button[value="Enter"] {
+  width: 160px;
 }
