@@ -41,7 +41,7 @@ class Key {
     if (this.data.shift !== null) {
       shiftValue = this.data.shift;
     }
-    this.key = control('button', 'key', this.data.value, this.keyCode, shiftValue);
+    this.key = control('button', 'key-button', this.data.value, this.keyCode, '');
     // this.title = control('button', 'key', this.data.value, this.keyCode, shiftValue);
     // console.log(this.title);
     // document.body.append(this.title);
@@ -54,30 +54,68 @@ class Key {
     // return key;
   }
 
-  click(target) {
+  click() {
     this.print();
-    target.classList.add('active');
   }
 
   keyDown() {
     this.print();
-    // console.log(event);
-    return this;
-    // this.key.classList.add('active');
+    this.key.classList.add('active');
+    // console.log(this.key);
+    console.log(this.keyCode);
+    if (this.keyCode === 'ShiftLeft') {
+      this.shift = true;
+      this.keyboard.changeLanguage();
+    }
+  }
+
+  keyUp() {
+    this.key.classList.remove('active');
+    console.log(this.keyCode);
+    if (this.keyCode === 'ShiftLeft') {
+      this.shift = false;
+      this.keyboard.changeLanguage();
+    }
   }
 
   print() {
-    this.textArea.value += this.data.value;
+    const { textArea } = this;
+    const textAreaValue = textArea.value;
+    const strStart = textArea.selectionStart;
+    const strEnd = textArea.selectionEnd;
+
+    if (this.key.value === 'Tab') {
+      textArea.value += '    ';
+    } else if (this.keyCode === 'Enter') {
+      textArea.value += '\n';
+    } else if (this.keyCode === 'Backspace') {
+      textArea.value = textAreaValue.substring(0, strStart - 1) + textAreaValue.substring(strEnd);
+      textArea.setSelectionRange(strStart - 1, strStart - 1);
+    } else if (this.keyCode === 'Delete') {
+      textArea.value = textAreaValue.substring(0, strStart) + textAreaValue.substring(strStart + 1);
+      textArea.setSelectionRange(strStart, strStart);
+    } else if (this.keyCode === 'ShiftLeft' || this.keyCode === 'ShiftRight') {
+      textArea.textContent.toUpperCase();
+      console.log(this.value);
+    } else {
+      textArea.value += this.data.value;
+    }
+    textArea.focus();
   }
 
   changeLanguage() {
-    const { lang } = this.keyboard;
-    console.log(lang);
+    const { lang, shift } = this.keyboard;
+    // console.log(lang);
     keysData[0][lang].forEach(() => {
       this.data = keysData[0][lang].find((keyDataCode) => keyDataCode.code === this.keyCode);
     });
+    if (shift) {
+      this.key.innerHTML = `<span class="key-value">${this.data.shift}</span>`;
+    } else {
+      this.key.innerHTML = `<span class="key-value">${this.data.value}</span>`;
+    }
     // console.log(this.data);
-    this.key.innerHTML = this.data.value;
+    // this.key.innerHTML = `<span class="key-value">${this.data.value}</span>`;
     // console.log(this.key);
     localStorage.setItem('language', lang);
   }

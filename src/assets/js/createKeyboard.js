@@ -2,9 +2,10 @@ import keysData from './keysData';
 import Key from './key';
 
 class Keyboard {
-  constructor(lang, textArea) {
+  constructor(lang, textArea, shift) {
     this.lang = lang;
     this.textArea = textArea;
+    this.shift = shift;
   }
 
   generateKeyboard() {
@@ -71,17 +72,23 @@ class Keyboard {
   eventHandler(event) {
     event.preventDefault();
     event.stopPropagation();
-
+    let language = localStorage.getItem('language');
     const key = this.keys;
+    const keyCode = event.code;
     if (event.type === 'keydown') {
-      const keyCode = event.code;
+      this.lang = language;
+      if (keyCode === 'ShiftLeft' || keyCode === 'ShiftRight') {
+        this.shift = true;
+      }
       key[keyCode].keyDown(event);
     }
     if (event.type === 'keyup') {
-      const keyCode = event.code;
+      key[keyCode].keyUp(event);
+      if (keyCode === 'ShiftLeft' || keyCode === 'ShiftRight') {
+        this.shift = false;
+      }
       key[keyCode].keyUp(event);
     }
-    let language = localStorage.getItem('language');
     if (event.ctrlKey && event.altKey) {
       if (language === 'ru') {
         language = 'en';
@@ -91,12 +98,6 @@ class Keyboard {
       console.log(language);
       this.lang = language;
       this.changeLanguage();
-    }
-    console.log(event);
-    if (event.key === 'Shift') {
-      console.log('shift');
-      this.lang = language;
-      this.shiftKey();
     }
   }
 
