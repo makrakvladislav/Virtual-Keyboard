@@ -1,4 +1,3 @@
-import keysData from './keysData';
 import Key from './key';
 import control from './control';
 
@@ -17,7 +16,6 @@ class Keyboard {
       ['ShiftLeft', 'KeyZ', 'KeyX', 'KeyC', 'KeyV', 'KeyB', 'KeyN', 'KeyM', 'Comma', 'Period', 'Slash', 'ArrowUp', 'ShiftRight'],
       ['ControlLeft', 'MetaLeft', 'AltLeft', 'Space', 'AltRight', 'ControlRight', 'ArrowLeft', 'ArrowDown', 'ArrowRight'],
     ];
-    // this.keys = [];
     const { body } = document;
     const container = control('div', 'container', '', '');
     body.append(container);
@@ -35,7 +33,6 @@ class Keyboard {
         this.keys[keyCode] = key;
         key.keyboard = this;
         rowEl.append(key.createKey());
-        // console.log(key);
       });
 
       keyboardWrapper.append(rowEl);
@@ -43,31 +40,6 @@ class Keyboard {
 
     document.addEventListener('keydown', (event) => this.eventHandler(event));
     document.addEventListener('keyup', (event) => { this.eventHandler(event); });
-    // window.addEventListener('mousedown', (event) => { this.eventHandler(event); });
-    // window.addEventListener('mouseup', (event) => { this.eventHandler(event); });
-    /*
-    const { body } = document;
-
-    const textArea = document.createElement('textarea');
-    textArea.classList.add('keyboard-textarea');
-    body.append(textArea);
-
-    const data = [...keysData];
-    const { lang } = this;
-
-    body.append(keyboardWrapper);
-    console.log(this.textArea);
-    data.forEach((item) => {
-      item[lang].forEach((key) => {
-        console.log(key);
-        this.keys.push(new Key(key));
-      });
-    });
-    // const createKey = new Key();
-    this.keys.forEach((item) => {
-      keyboardWrapper.append(item.createKey());
-    });
-    */
   }
 
   eventHandler(event) {
@@ -96,7 +68,6 @@ class Keyboard {
       } else {
         language = 'ru';
       }
-      console.log(language);
       this.lang = language;
       this.changeLanguage();
     }
