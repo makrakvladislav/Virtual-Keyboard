@@ -34,6 +34,9 @@
   overflow: hidden;
   &:active {
     transform: scale(0.9);
+    &:before {
+      background: linear-gradient(90deg, #d8d8d8, #202020);
+    }
   }
 }
 
@@ -55,16 +58,19 @@
 .key-button {
   .key-value {
     position: relative;
-    z-index: 100;
+    z-index: 1;
   }
   .key-shift {
     position: relative;
-    z-index: 100;
+    z-index: 1;
   }
 }
 
 .key-button.active {
   transform: scale(0.9);
+  &:before {
+    background: linear-gradient(90deg, #d8d8d8, #202020);
+  }
 }
 
 button[value="Tab"] {
