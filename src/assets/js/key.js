@@ -64,6 +64,8 @@ class Key {
     } else if (this.keyCode === 'CapsLock') {
       textArea.textContent += '';
       textArea.textContent += this.data.value.toUpperCase();
+    } else if (this.keyCode === 'AltLeft' || this.keyCode === 'ControlLeft' || this.keyCode === 'ControlRight' || this.keyCode === 'AltRight' || this.keyCode === 'MetaLeft') {
+      textArea.textContent += '';
     } else {
       textArea.value += this.data.value;
     }
