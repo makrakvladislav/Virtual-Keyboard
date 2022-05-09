@@ -1,5 +1,6 @@
 import keysData from './keysData';
 import Key from './key';
+import control from './control';
 
 class Keyboard {
   constructor(lang, textArea, shift) {
@@ -18,12 +19,12 @@ class Keyboard {
     ];
     // this.keys = [];
     const { body } = document;
-    const keyboardWrapper = document.createElement('div');
-    keyboardWrapper.classList.add('keyboard-wrapper');
-    body.append(keyboardWrapper);
-    const textArea = document.createElement('textarea');
-    textArea.classList.add('keyboard__input');
-    body.prepend(textArea);
+    const container = control('div', 'container', '', '');
+    body.append(container);
+    const keyboardWrapper = control('div', 'keyboard-wrapper', '', '');
+    const textArea = control('textarea', 'keyboard__input', '', '');
+    container.append(textArea);
+    container.append(keyboardWrapper);
 
     this.keys = {};
     this.template.forEach((row) => {
