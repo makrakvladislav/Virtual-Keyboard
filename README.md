@@ -1,15 +1,19 @@
-# 🚀 Welcome to your new awesome project!
+# 🚀 Instruction For Cross-check 
 
 This project has been created using **webpack-cli**, you can now run
 
 ```
-npm run build
+git clone https://github.com/makrakvladislav/Virtual-Keyboard.git
 ```
 
-or
-
 ```
-yarn build
+git checkout virtual-keyboard-dev
 ```
 
-to bundle your application
+```
+npm install
+```
+
+```
+npm run lint
+```
