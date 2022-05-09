@@ -2,10 +2,11 @@ import Key from './key';
 import control from './control';
 
 class Keyboard {
-  constructor(lang, textArea, shift) {
+  constructor(lang, textArea, shift, shiftValue) {
     this.lang = lang;
     this.textArea = textArea;
     this.shift = shift;
+    this.shiftValue = shiftValue;
   }
 
   generateKeyboard() {
@@ -52,10 +53,22 @@ class Keyboard {
       this.lang = language;
       if (keyCode === 'ShiftLeft' || keyCode === 'ShiftRight') {
         this.shift = true;
+        // this.shiftValue = key[keyCode].data.shift;
+        // console.log(key[keyCode].data.shift);
+        key[keyCode].keyDown(event);
       }
-      key[keyCode].keyDown(event);
+      if (key[keyCode]) {
+        key[keyCode].keyDown(event);
+      }
+
+      /*
+      this.shiftValue = key[keyCode].data.shift;
+      if (this.shiftValue) {
+        key[keyCode].keyDown(this.shiftValue);
+      }
+      */
     }
-    if (event.type === 'keyup') {
+    if (event.type === 'keyup' && key[keyCode]) {
       key[keyCode].keyUp(event);
       if (keyCode === 'ShiftLeft' || keyCode === 'ShiftRight') {
         this.shift = false;
