@@ -2,7 +2,7 @@ import Keyboard from './createKeyboard';
 import control from './control';
 
 window.onload = () => {
-  let language;
+  let language = 'en';
   if (localStorage.getItem('language')) {
     language = localStorage.getItem('language');
   } else {
@@ -18,6 +18,4 @@ window.onload = () => {
   headerSubTitle.innerHTML += 'Для переключения языка комбинация: левыe ctrl + alt';
   const keyboard = new Keyboard(language);
   keyboard.generateKeyboard();
-
-  // console.log(keys);
 };
