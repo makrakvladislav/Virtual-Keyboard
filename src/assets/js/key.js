@@ -14,40 +14,44 @@ class Key {
 
   createKey() {
     this.key = control('button', 'key-button', this.data.value, this.keyCode, '');
-    this.key.onclick = (event) => {
-      this.click(event.target);
-    };
     return this.key;
   }
 
-  click() {
-    this.print();
+  click(event) {
+    this.print(event);
   }
 
-  keyDown(shiftValue) {
-    this.print(shiftValue);
+  keyDown(event) {
+    const caps = event.getModifierState && event.getModifierState('CapsLock');
+    const shift = event.getModifierState && event.getModifierState('Shift');
+    this.print(event, caps, shift);
     this.key.classList.add('active');
-    if (this.keyCode === 'ShiftLeft' || this.keyCode === 'ShiftRight') {
+    if (this.keyCode === 'ShiftLeft' || this.keyCode === 'ShiftRight' || event.target.value === 'ShiftLeft' || event.target.value === 'ShiftRight') {
       this.shift = true;
+      this.keyboard.changeLanguage();
+    }
+    if (caps) {
+      this.shift = true;
+      this.keyboard.changeLanguage();
+    } else if (!caps) {
+      this.shift = false;
       this.keyboard.changeLanguage();
     }
   }
 
   keyUp() {
     this.key.classList.remove('active');
-    if (this.keyCode === 'ShiftLeft' || this.keyCode === 'ShiftRight') {
+    if (this.keyCode === 'ShiftLeft' || this.keyCode === 'ShiftRight' || this.key.value === 'ShiftLeft' || this.key.value === 'ShiftRight') {
       this.shift = false;
       this.keyboard.changeLanguage();
     }
   }
 
-  print(shiftValue) {
+  print(event, caps, shift) {
     const { textArea } = this;
     const textAreaValue = textArea.value;
     const strStart = textArea.selectionStart;
     const strEnd = textArea.selectionEnd;
-    // console.log(this.shiftValue);
-    // console.log(this.data.value);
     if (this.key.value === 'Tab') {
       textArea.value += '    ';
     } else if (this.keyCode === 'Enter') {
@@ -58,18 +62,22 @@ class Key {
     } else if (this.keyCode === 'Delete') {
       textArea.value = textAreaValue.substring(0, strStart) + textAreaValue.substring(strStart + 1);
       textArea.setSelectionRange(strStart, strStart);
-    } else if (this.keyCode === 'ShiftLeft' || this.keyCode === 'ShiftRight') {
-      textArea.textContent += '';
-      textArea.textContent += shiftValue;
-    } else if (this.keyCode === 'CapsLock') {
-      textArea.textContent += '';
-      textArea.textContent += this.data.value.toUpperCase();
+    } else if (event.shiftKey || shift || this.key.value === 'ShiftLeft' || this.key.value === 'ShifRight') {
+      if (this.data.shift !== null) {
+        textArea.value += this.data.shift;
+      }
+    } else if (this.data.code === 'CapsLock' || this.key.value === 'CapsLock') {
+      if (caps) {
+        this.data.value = '';
+        textArea.value += this.data.value.toUpperCase();
+      } else {
+        textArea.value += this.data.value;
+      }
     } else if (this.keyCode === 'AltLeft' || this.keyCode === 'ControlLeft' || this.keyCode === 'ControlRight' || this.keyCode === 'AltRight' || this.keyCode === 'MetaLeft') {
       textArea.textContent += '';
     } else {
       textArea.value += this.data.value;
     }
-    textArea.focus();
   }
 
   changeLanguage() {
@@ -80,6 +88,9 @@ class Key {
     if (shift && this.data.shift !== null) {
       this.key.innerHTML = `<span class="key-value">${this.data.shift}</span>`;
     } else {
+      this.key.innerHTML = `<span class="key-value">${this.data.value}</span>`;
+    }
+    if (!shift) {
       this.key.innerHTML = `<span class="key-value">${this.data.value}</span>`;
     }
     localStorage.setItem('language', lang);

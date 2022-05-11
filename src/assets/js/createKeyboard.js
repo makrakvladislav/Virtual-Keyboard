@@ -34,13 +34,16 @@ class Keyboard {
         this.keys[keyCode] = key;
         key.keyboard = this;
         rowEl.append(key.createKey());
+        return key;
       });
 
       keyboardWrapper.append(rowEl);
     });
 
+    keyboardWrapper.addEventListener('mousedown', (event) => this.eventHandler(event));
+    keyboardWrapper.addEventListener('mouseup', (event) => this.eventHandler(event));
     document.addEventListener('keydown', (event) => this.eventHandler(event));
-    document.addEventListener('keyup', (event) => { this.eventHandler(event); });
+    document.addEventListener('keyup', (event) => this.eventHandler(event));
   }
 
   eventHandler(event) {
@@ -49,24 +52,37 @@ class Keyboard {
     let language = localStorage.getItem('language');
     const key = this.keys;
     const keyCode = event.code;
+    if (event.type === 'mousedown') {
+      if (!event.target.closest('.key-button')) return;
+      this.lang = language;
+      const keyVal = event.target.closest('.key-button').value;
+
+      if (keyVal === 'ShiftLeft' || keyVal === 'ShiftRight' || keyVal === 'CapsLock') {
+        this.shift = true;
+        this.shiftValue = key[event.target.value].data.shift;
+        key[keyVal].keyDown(event);
+      }
+      key[keyVal].click(event);
+    }
+    if (event.type === 'mouseup') {
+      if (!event.target.closest('.key-button')) return;
+      const keyVal = event.target.closest('.key-button').value;
+      key[keyVal].keyUp(event);
+      if (event.target.value === 'ShiftLeft' || event.target.value === 'ShiftRight') {
+        this.shift = false;
+      }
+      key[keyVal].keyUp(event);
+    }
     if (event.type === 'keydown') {
       this.lang = language;
-      if (keyCode === 'ShiftLeft' || keyCode === 'ShiftRight') {
+      if (keyCode === 'ShiftLeft' || keyCode === 'ShiftRight' || keyCode === 'CapsLock') {
         this.shift = true;
-        // this.shiftValue = key[keyCode].data.shift;
-        // console.log(key[keyCode].data.shift);
+        this.shiftValue = key[keyCode].data.shift;
         key[keyCode].keyDown(event);
       }
       if (key[keyCode]) {
         key[keyCode].keyDown(event);
       }
-
-      /*
-      this.shiftValue = key[keyCode].data.shift;
-      if (this.shiftValue) {
-        key[keyCode].keyDown(this.shiftValue);
-      }
-      */
     }
     if (event.type === 'keyup' && key[keyCode]) {
       key[keyCode].keyUp(event);
