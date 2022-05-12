@@ -31,10 +31,10 @@ class Key {
       this.keyboard.changeLanguage();
     }
     if (caps) {
-      this.shift = true;
+      this.caps = caps;
       this.keyboard.changeLanguage();
-    } else if (!caps) {
-      this.shift = false;
+    } else {
+      this.caps = caps;
       this.keyboard.changeLanguage();
     }
   }
@@ -66,32 +66,32 @@ class Key {
       if (this.data.shift !== null) {
         textArea.value += this.data.shift;
       }
-    } else if (this.data.code === 'CapsLock' || this.key.value === 'CapsLock') {
-      if (caps) {
-        this.data.value = '';
-        textArea.value += this.data.value.toUpperCase();
-      } else {
-        textArea.value += this.data.value;
-      }
     } else if (this.keyCode === 'AltLeft' || this.keyCode === 'ControlLeft' || this.keyCode === 'ControlRight' || this.keyCode === 'AltRight' || this.keyCode === 'MetaLeft') {
       textArea.textContent += '';
+    } else if (this.key.value === 'CapsLock') {
+      textArea.value += '';
+    } else if (caps) {
+      textArea.value += this.data.value.toUpperCase();
     } else {
       textArea.value += this.data.value;
     }
   }
 
   changeLanguage() {
-    const { lang, shift } = this.keyboard;
+    const { lang, shift, caps } = this.keyboard;
     keysData[0][lang].forEach(() => {
       this.data = keysData[0][lang].find((keyDataCode) => keyDataCode.code === this.keyCode);
     });
-    if (shift && this.data.shift !== null) {
+
+    if (caps && this.data.shift !== null) {
+      this.key.innerHTML = `<span class="key-value">${this.data.value.toUpperCase()}</span>`;
+    } else if (shift && this.data.shift !== null) {
       this.key.innerHTML = `<span class="key-value">${this.data.shift}</span>`;
-    } else {
+    } else if (!shift) {
       this.key.innerHTML = `<span class="key-value">${this.data.value}</span>`;
     }
-    if (!shift) {
-      this.key.innerHTML = `<span class="key-value">${this.data.value}</span>`;
+    if (caps && shift && this.data.shift !== null) {
+      this.key.innerHTML = `<span class="key-value">${this.data.shift}</span>`;
     }
     localStorage.setItem('language', lang);
   }

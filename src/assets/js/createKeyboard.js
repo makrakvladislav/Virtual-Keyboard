@@ -2,11 +2,12 @@ import Key from './key';
 import control from './control';
 
 class Keyboard {
-  constructor(lang, textArea, shift, shiftValue) {
+  constructor(lang, textArea, shift, shiftValue, caps) {
     this.lang = lang;
     this.textArea = textArea;
     this.shift = shift;
     this.shiftValue = shiftValue;
+    this.caps = caps;
   }
 
   generateKeyboard() {
@@ -52,12 +53,12 @@ class Keyboard {
     let language = localStorage.getItem('language');
     const key = this.keys;
     const keyCode = event.code;
+
     if (event.type === 'mousedown') {
       if (!event.target.closest('.key-button')) return;
       this.lang = language;
       const keyVal = event.target.closest('.key-button').value;
-
-      if (keyVal === 'ShiftLeft' || keyVal === 'ShiftRight' || keyVal === 'CapsLock') {
+      if (keyVal === 'ShiftLeft' || keyVal === 'ShiftRight') {
         this.shift = true;
         this.shiftValue = key[event.target.value].data.shift;
         key[keyVal].keyDown(event);
@@ -75,9 +76,14 @@ class Keyboard {
     }
     if (event.type === 'keydown') {
       this.lang = language;
-      if (keyCode === 'ShiftLeft' || keyCode === 'ShiftRight' || keyCode === 'CapsLock') {
+      if (keyCode === 'ShiftLeft' || keyCode === 'ShiftRight') {
         this.shift = true;
         this.shiftValue = key[keyCode].data.shift;
+        key[keyCode].keyDown(event);
+      }
+      if (keyCode === 'CapsLock') {
+        const caps = event.getModifierState && event.getModifierState('CapsLock');
+        this.caps = caps;
         key[keyCode].keyDown(event);
       }
       if (key[keyCode]) {
@@ -86,8 +92,10 @@ class Keyboard {
     }
     if (event.type === 'keyup' && key[keyCode]) {
       key[keyCode].keyUp(event);
-      if (keyCode === 'ShiftLeft' || keyCode === 'ShiftRight') {
+      if (keyCode === 'ShiftLeft' || keyCode === 'ShiftRight' || keyCode === 'CapsLock') {
+        const caps = event.getModifierState && event.getModifierState('CapsLock');
         this.shift = false;
+        this.caps = caps;
       }
       key[keyCode].keyUp(event);
     }
